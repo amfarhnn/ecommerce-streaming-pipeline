@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import time
 from datetime import datetime
@@ -6,7 +7,9 @@ from uuid import uuid4
 
 from faker import Faker
 from kafka import KafkaProducer
+from dotenv import load_dotenv
 
+load_dotenv()
 
 fake = Faker()
 
@@ -25,7 +28,7 @@ EVENT_TYPES = ["page_view", "add_to_cart", "purchase"]
 
 
 producer = KafkaProducer(
-    bootstrap_servers="localhost:9092",
+    bootstrap_servers=os.getenv("KAFKA_BROKER"),
     value_serializer=lambda v: json.dumps(v).encode("utf-8"),
 )
 

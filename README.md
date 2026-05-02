@@ -1,66 +1,61 @@
 # Real-Time E-commerce Event Streaming Pipeline
 
-An end-to-end real-time data engineering project that simulates an e-commerce platform by generating user events, streaming them through a Kafka-compatible system (Redpanda), processing them in real time, storing them in a database, and producing analytics for business insights.
+An end-to-end real-time data engineering project that simulates an e-commerce platform by generating user events, streaming them through a Kafka-compatible system (Redpanda), processing them in real time, storing them in PostgreSQL, and producing analytics for business insights.
 
----
+## 🚀 Project Overview
 
-## Project Overview
+This project demonstrates a real-time streaming pipeline using producer-consumer architecture.
 
-This project demonstrates a real-time streaming pipeline where user interactions such as page views, add-to-cart actions, and purchases are continuously generated and processed.
+It simulates user activity such as page views, add-to-cart actions, and purchases, and transforms raw event streams into analytics-ready insights.
 
-The system simulates how modern e-commerce platforms track user behavior and convert raw event streams into actionable insights.
-
----
-
-## Architecture
+## 🧠 Architecture
 
 ```
-Python Event Producer
-        ↓
+Python Producer
+      ↓
 Redpanda (Kafka Broker)
-        ↓
+      ↓
 Python Consumer
-        ↓
-SQLite Database
-        ↓
-SQL Analytics
-        ↓
-CSV Exports
-        ↓
-Power BI Dashboard
+      ↓
+Real-Time Processing (Filter + Transform)
+      ↓
+PostgreSQL Database
+      ↓
+Aggregation Table
+      ↓
+Analytics → Power BI Dashboard
 ```
 
----
-
-## Tech Stack
+## 🛠️ Tech Stack
 
 - Python
 - Redpanda (Kafka-compatible streaming platform)
 - Kafka-Python
-- Faker
-- SQLite
+- Faker (data simulation)
+- PostgreSQL
 - SQL
 - Pandas
-- Docker
+- Docker & Docker Compose
+- python-dotenv (.env configuration)
 - Power BI
 - Git & GitHub
 
----
+## 🔥 Key Features
 
-## Key Features
+- Real-time event streaming using producer-consumer pattern
+- Kafka-compatible message broker (Redpanda)
+- Event-driven architecture
+- Data transformation and filtering in streaming consumer
+- High-value transaction detection
+- Real-time aggregation (revenue & purchases)
+- PostgreSQL integration for production-level storage
+- Environment-based configuration using .env
+- Full containerization using Docker Compose
+- Dashboard visualization with Power BI
 
-- Simulates real-time e-commerce user events
-- Implements producer-consumer architecture
-- Uses Redpanda as a lightweight Kafka alternative
-- Processes streaming data continuously
-- Stores events in a structured SQLite database
-- Performs SQL-based analytics
-- Exports processed data for reporting
-- Visualizes insights using Power BI
+## 📦 Event Structure
 
----
-
-## Event Structure
+Example event:
 
 ```json
 {
@@ -74,9 +69,7 @@ Power BI Dashboard
 }
 ```
 
----
-
-## Project Structure
+## 🗂️ Project Structure
 
 ```
 ecommerce-streaming-pipeline/
@@ -84,7 +77,7 @@ ecommerce-streaming-pipeline/
 ├── src/
 │   ├── producer.py
 │   ├── consumer.py
-│   └── db.py
+│   ├── db_postgres.py
 │
 ├── exports/
 │   ├── event_count_by_type.csv
@@ -93,99 +86,133 @@ ecommerce-streaming-pipeline/
 │   └── latest_events.csv
 │
 ├── docker-compose.yml
-├── ecommerce_events.db
+├── Dockerfile
+├── .env
+├── .gitignore
 ├── analytics.py
 ├── export_analytics.py
 ├── requirements.txt
 └── README.md
 ```
 
----
+## 🔐 Environment Configuration (.env)
 
-## How to Run
-
-1. **Start Redpanda (Kafka)**
-   ```bash
-   docker compose up -d
-   ```
-
-2. **Run Producer**
-   ```bash
-   python src/producer.py
-   ```
-
-3. **Run Consumer**
-   ```bash
-   python src/consumer.py
-   ```
-
-4. **Run Analytics**
-   ```bash
-   python analytics.py
-   ```
-
-5. **Export Data**
-   ```bash
-   python export_analytics.py
-   ```
-
----
-
-## Dashboard
-
-The Power BI dashboard includes:
-
-- **Event count by type** (page view, add to cart, purchase)
-- **Top products by purchases**
-- **Revenue analysis by product**
-- **Latest events table**
-
-Suggested screenshot path:
 ```
-screenshots/powerbi_dashboard.png
+POSTGRES_HOST=postgres
+POSTGRES_DB=ecommerce_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_PORT=5432
+
+KAFKA_BROKER=redpanda:9092
 ```
 
----
+## ▶️ How to Run (Docker)
 
-## Challenges & Solutions
+```bash
+docker compose up --build
+```
+
+## 🧪 Local Development
+
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run Producer
+
+```bash
+python src/producer.py
+```
+
+### Run Consumer
+
+```bash
+python src/consumer.py
+```
+
+## 📊 Analytics
+
+Run SQL-based analytics:
+
+```bash
+python analytics.py
+```
+
+## 📁 Export Data
+
+```bash
+python export_analytics.py
+```
+
+## 📈 Dashboard
+
+Power BI dashboard includes:
+
+- Event distribution by type
+- Top-selling products
+- Revenue by product
+- Latest events table
+
+## ⚙️ Real-Time Processing Logic
+
+- Filters and processes events in real time
+- Adds high_value flag for expensive transactions
+- Updates aggregation table continuously
+
+## 🧱 Database Design
+
+### events table
+
+- Stores all streaming events
+- Includes transformation fields (e.g. high_value)
+
+### product_sales_summary table
+
+- Stores aggregated results
+- Updates in real time
+
+## 🧠 Challenges & Solutions
 
 | Challenge | Solution |
 |-----------|----------|
-| Initial complexity in setting up Kafka-like streaming system | Used Redpanda to simplify local deployment via Docker |
-| Implementing producer-consumer pattern for real-time data flow | Created separate producer and consumer modules |
-| Ensuring data persistence | Used SQLite database for structured storage |
+| Kafka setup complexity | Solved using Redpanda |
+| Docker networking issues | Solved using service names (redpanda, postgres) |
+| Data consistency | Handled with INSERT conflict strategies |
+| Fault tolerance | Implemented retry logic |
+| Configuration security | Migrated to .env variables |
 
----
-
-## Skills Demonstrated
+## 💡 Skills Demonstrated
 
 - Real-time data streaming
-- Event-driven architecture
 - Kafka/Redpanda fundamentals
-- Producer-consumer design pattern
-- Data ingestion and processing
+- Producer-consumer architecture
+- Event-driven system design
+- Data ingestion and transformation
+- PostgreSQL database integration
 - SQL analytics and aggregation
-- Data export and reporting
-- Dashboard visualization
-- Docker usage
+- Docker containerization
+- Environment configuration (.env)
+- Dashboard reporting
+
+## 📄 Resume Summary
+
+Built a real-time streaming data pipeline using Python, Redpanda (Kafka-compatible), and PostgreSQL. Implemented producer-consumer architecture for event ingestion, real-time transformation and aggregation, secure configuration using environment variables, and analytics visualization using Power BI.
+
+## 🔮 Future Improvements
+
+- Integrate Apache Spark Streaming
+- Add real-time dashboard updates
+- Deploy pipeline to Azure Container Apps
+- Implement monitoring (Datadog / Prometheus)
+- Add CI/CD using GitHub Actions
 
 ---
 
-## Resume Summary
-
-Built a real-time e-commerce event streaming pipeline using Python and Redpanda (Kafka-compatible), implementing producer-consumer architecture for event ingestion, storing streaming data in SQLite, performing SQL analytics, and generating business insights through Power BI dashboards.
-
----
-
-## Future Improvements
-
-- Replace SQLite with PostgreSQL or cloud database
-- Add stream processing with Apache Spark
-- Implement real-time dashboard updates
-- Deploy pipeline to cloud environment
-- Add monitoring and alerting
-
----
-
-✅ ATS & Recruiter Friendly  
-✅ Production-Ready Documentation
+✅ **Technically Strong**  
+✅ **Production-Style**  
+✅ **Secure (.env)**  
+✅ **Scalable (consumer group)**  
+✅ **Recruiter-Ready**

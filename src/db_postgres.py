@@ -1,16 +1,23 @@
-import sqlite3
-from pathlib import Path
+import os
+from dotenv import load_dotenv
+import psycopg2
+from psycopg2.extras import RealDictCursor
+
+load_dotenv()
 
 
-DB_PATH = Path("ecommerce_events.db")
-
-
-def create_connection():
-    return sqlite3.connect(DB_PATH)
+def get_connection():
+    return psycopg2.connect(
+        host=os.getenv("POSTGRES_HOST"),
+        database=os.getenv("POSTGRES_DB"),
+        user=os.getenv("POSTGRES_USER"),
+        password=os.getenv("POSTGRES_PASSWORD"),
+        port=os.getenv("POSTGRES_PORT")
+    )
 
 
 def create_events_table():
-    conn = create_connection()
+    conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -39,11 +46,11 @@ def create_events_table():
 
 
 def insert_event(event):
-    conn = create_connection()
+    conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-        INSERT OR IGNORE INTO events (
+        INSERT INTO events (
             event_id,
             user_id,
             user_name,
@@ -53,7 +60,8 @@ def insert_event(event):
             timestamp,
             high_value
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (event_id) DO NOTHING
     """, (
         event["event_id"],
         event["user_id"],
@@ -73,7 +81,7 @@ def update_product_sales_summary(event):
     if event["event_type"] != "purchase":
         return
 
-    conn = create_connection()
+    conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -82,10 +90,10 @@ def update_product_sales_summary(event):
             total_purchases,
             total_revenue
         )
-        VALUES (?, 1, ?)
-        ON CONFLICT(product) DO UPDATE SET
-            total_purchases = total_purchases + 1,
-            total_revenue = total_revenue + excluded.total_revenue
+        VALUES (%s, 1, %s)
+        ON CONFLICT (product) DO UPDATE SET
+            total_purchases = product_sales_summary.total_purchases + 1,
+            total_revenue = product_sales_summary.total_revenue + EXCLUDED.total_revenue
     """, (
         event["product"],
         event["price"]

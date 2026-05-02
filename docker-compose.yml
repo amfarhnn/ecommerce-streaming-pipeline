@@ -12,6 +12,23 @@ services:
       - --node-id=0
       - --check=false
       - --kafka-addr=PLAINTEXT://0.0.0.0:9092
-      - --advertise-kafka-addr=PLAINTEXT://localhost:9092
+      - --advertise-kafka-addr=PLAINTEXT://redpanda:9092
     ports:
       - "9092:9092"
+
+  producer:
+    build: .
+    command: python src/producer.py
+    env_file:
+      - .env
+    depends_on:
+      - redpanda
+
+  consumer:
+    build: .
+    command: python src/consumer.py
+    env_file:
+      - .env
+    depends_on:
+      - redpanda
+
