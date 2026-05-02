@@ -25,7 +25,7 @@ EVENT_TYPES = ["page_view", "add_to_cart", "purchase"]
 
 
 producer = KafkaProducer(
-    bootstrap_servers="localhost:9092",
+    bootstrap_servers="redpanda:9092",
     value_serializer=lambda v: json.dumps(v).encode("utf-8"),
 )
 

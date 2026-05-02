@@ -45,6 +45,7 @@ Thumbs.db
 ecommerce_events.db
 
 # Logs
+logs/
 *.log
 
 # Project specific

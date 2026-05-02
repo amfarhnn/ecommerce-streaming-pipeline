@@ -45,90 +45,104 @@ Power BI Dashboard
 
 
 🛠 Tech Stack
-# Real-Time E-commerce Event Streaming Pipeline (Advanced)
-
-An end-to-end, production-style real-time data engineering project that simulates an e-commerce system by generating user events, streaming them through a Kafka-compatible platform (Redpanda), processing them in real time, validating and transforming data, storing it in PostgreSQL, and producing analytics for business insights.
-
-## 🚀 Project Overview
-
-This repository demonstrates a fully containerized real-time streaming pipeline using a producer → broker → consumer architecture. It simulates user interactions (page views, add-to-cart, purchase), validates and transforms events, persists them in PostgreSQL, maintains a real-time aggregation table, and exposes CSV exports for analytics and dashboards.
-
-Key practices showcased:
-
-- Event-driven architecture
-- Real-time processing
-- Schema validation and transformation
-- Aggregation and analytics
-- Fault tolerance (dead-letter queue)
-- Containerized deployment with Docker Compose
-
-## 🧠 Architecture
-
-Python Producer (Docker)
-→ Redpanda (Kafka Broker)
-→ Python Consumer (Docker)
-→ Schema Validation + Transformation
-→ PostgreSQL Database
-→ Aggregation Table (Real-time)
-→ Dead Letter Queue (Error Handling)
-→ Analytics + CSV Export
-→ Power BI Dashboard
-
-## 🛠 Tech Stack
 
 - Python
+
+
 - Redpanda (Kafka-compatible streaming platform)
-- kafka-python
+
+
+- Kafka-Python
+
+
 - PostgreSQL
+
+
 - SQL
-- pandas
+
+
+- Pandas
+
+
 - Faker (data simulation)
+
+
 - Docker & Docker Compose
+
+
 - Power BI
+
+
 - Git & GitHub
 
-## 🔑 Key Features
+
+
+🔑 Key Features
 
 - Simulates real-time e-commerce user activity
-- Producer-consumer streaming architecture
-- Redpanda as a lightweight Kafka alternative
-- Real-time transformation and aggregation
-- Schema validation to ensure data integrity
-- PostgreSQL persistence and aggregation table
-- Dead-letter queue for failed events
-- Logging and simple monitoring counters
-- Fully containerized deployment
-- Exports CSVs for BI/Power BI
 
-## 📦 Event Structure (example)
 
-```json
+- Implements producer-consumer streaming architecture
+
+
+- Uses Redpanda as a lightweight Kafka alternative
+
+
+- Processes events in real time with transformation logic
+
+
+- Implements schema validation to ensure data integrity
+
+
+- Stores streaming data in PostgreSQL
+
+
+- Maintains real-time aggregation (product sales summary)
+
+
+- Implements dead-letter queue for failed events
+
+
+- Includes logging and monitoring
+
+
+- Fully containerized pipeline using Docker Compose
+
+
+- Provides business insights via Power BI dashboard
+
+
+
+📦 Event Structure
+Example event:
 {
-        "event_id": "abc123",
-        "user_id": 45,
-        "user_name": "John Doe",
-        "event_type": "purchase",
-        "product": "Laptop",
-        "price": 2999.00,
-        "timestamp": "2026-05-01T10:30:00"
+  "event_id": "abc123",
+  "user_id": 45,
+  "user_name": "John Doe",
+  "event_type": "purchase",
+  "product": "Laptop",
+  "price": 2999.00,
+  "timestamp": "2026-05-01T10:30:00"
 }
-```
 
-## 🗂 Project Structure
 
-```
+🗂 Project Structure
 ecommerce-streaming-pipeline/
+│
 ├── src/
 │   ├── producer.py
 │   ├── consumer.py
-│   └── db.py
+│   ├── db.py
+│
 ├── exports/
 │   ├── event_count_by_type.csv
 │   ├── top_products_by_purchases.csv
 │   ├── total_revenue_by_product.csv
 │   └── latest_events.csv
+│
 ├── logs/
 │   └── streaming_pipeline.log
+│
 ├── docker-compose.yml
 ├── Dockerfile
 ├── analytics.py
@@ -137,105 +151,91 @@ ecommerce-streaming-pipeline/
 ├── requirements.txt
 ├── .env
 └── README.md
-```
 
-## ⚙️ How to Run (Full Pipeline)
 
-1. Build and start the full stack (producer, consumer, Redpanda, Postgres):
-
+⚙️ How to Run (Full Pipeline)
+1. Start all services
 ```bash
 docker compose up --build
 ```
 
-2. Typical flow:
+2. Pipeline Flow
+Producer generates events continuously
 
-- Producer continuously generates events to the `ecommerce-events` topic.
-- Redpanda brokers the messages.
-- Consumer validates, transforms, persists events, updates the aggregation table, and routes invalid/faulty messages to a `dead-letter-events` topic.
 
-3. Stop the stack:
+Redpanda streams messages
 
-```bash
-docker compose down
-```
 
-## 📊 Analytics
+Consumer processes events in real time
 
+
+PostgreSQL stores structured data
+
+
+Aggregation table updates dynamically
+
+
+Failed events are sent to dead-letter queue
+
+
+
+📊 Analytics
 Example SQL queries:
-
-- Event counts by type:
-
-```sql
+-- Event count
 SELECT event_type, COUNT(*) FROM events GROUP BY event_type;
-```
 
-- Revenue per product:
-
-```sql
+-- Revenue
 SELECT product, SUM(price) FROM product_sales_summary GROUP BY product;
-```
 
-- Top products by purchases:
-
-```sql
+-- Top products
 SELECT product, total_purchases FROM product_sales_summary ORDER BY total_purchases DESC;
-```
 
-## 📁 Data Outputs
 
-Exported CSV files are saved under the `exports/` folder:
+📁 Data Outputs
+Exported CSV files:
+exports/
+├── event_count_by_type.csv
+├── top_products_by_purchases.csv
+├── total_revenue_by_product.csv
+├── latest_events.csv
 
-- `event_count_by_type.csv`
-- `top_products_by_purchases.csv`
-- `total_revenue_by_product.csv`
-- `latest_events.csv`
 
-## 📈 Dashboard
+📈 Dashboard
+Power BI dashboard visualizes:
+Event distribution (page view, add to cart, purchase)
 
-Use Power BI to visualize:
 
-- Event distribution (page view, add to cart, purchase)
-- Top-performing products
-- Revenue trends
-- Latest user activity
+Top-performing products
 
-Suggested screenshot: `screenshots/powerbi_dashboard.png`
 
-## ⚠️ Challenges & Solutions
+Revenue trends
 
-- Kafka complexity → used Redpanda for simplified local setup
-- Streaming reliability → implemented dead-letter queue
-- Data integrity → added schema validation
-- Local environment issues → resolved Docker and Postgres initialization by recreating volumes when credentials change
 
-## 🧠 Skills Demonstrated
+Latest user activity
 
-- Real-time data streaming
-- Event-driven architecture
-- Kafka/Redpanda fundamentals
-- Producer-consumer pattern
-- Data validation and transformation
-- PostgreSQL integration
-- Real-time aggregation logic
-- Fault-tolerant design (dead-letter queue)
-- Docker containerization
-- Data analytics and visualization
 
-## 💬 Resume Summary
+Suggested screenshot:
+screenshots/powerbi_dashboard.png
 
-Built a fully containerized real-time e-commerce event streaming pipeline using Python, Redpanda (Kafka-compatible), and PostgreSQL. Implemented schema validation, transformation, aggregation, dead-letter handling, logging, and CSV exports for analytics and dashboarding.
 
-## 🔮 Future Improvements
+⚠️ Challenges & Solutions
+Kafka complexity → solved using Redpanda for simplified setup
 
-- Add Apache Spark or Flink for advanced stream processing
-- Deploy pipeline to cloud (Azure/AWS/GCP)
-- Add real-time dashboard updates (WebSocket / push)
-- Add monitoring (Prometheus + Grafana) and alerting
-- Integrate CI/CD and automated tests
 
----
+Streaming reliability → implemented dead-letter queue
 
-If you want, I can open a PR for this README change or keep it on `main` (currently pushed).
+
+Data integrity → added schema validation
+
+
+Scaling architecture → used containerized microservices
+
+
+Local environment issues → resolved Docker, WSL, and virtualization setup
+
+
+
+🧠 Skills Demonstrated
 
 - Real-time data streaming
 
