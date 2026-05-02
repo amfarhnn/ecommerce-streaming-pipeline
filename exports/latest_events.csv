@@ -1,0 +1,19 @@
+event_id,user_id,user_name,event_type,product,price,timestamp
+73820021-5b22-4689-8035-24c21708c195,53,Madeline Pena,page_view,Smartwatch,2766.66,2026-04-30T22:57:49.240306
+a850485c-73d3-4ba5-a26b-19c5c8a8d082,52,Melissa Miller,add_to_cart,Laptop,1987.25,2026-04-30T22:57:47.238270
+d26db0de-1610-4a71-9c9b-15ad9b1ba881,31,Sharon Rodriguez,add_to_cart,Laptop,2165.93,2026-04-30T22:57:45.236018
+d6adf8b1-7520-4c96-b0ca-7f6da775a6c5,29,Shelby Wagner,add_to_cart,Tablet,938.65,2026-04-30T22:57:43.234135
+78ac3493-3d43-41a6-9c97-b596000f346e,78,Christine Hart,purchase,Smartphone,1837.29,2026-04-30T22:57:41.232279
+f9b39c5c-c12a-455a-b7c4-b4cdff225dc5,84,Caitlin Kelley,page_view,Laptop,405.33,2026-04-30T22:57:39.230002
+1ccee2cb-2a57-4814-9b93-2045710e0f7d,94,Tiffany Garcia,purchase,Tablet,2407.49,2026-04-30T22:57:37.227913
+cc5cb2d5-f8d3-4f22-8593-bbdc9433bd72,90,Alec Fields,page_view,Laptop,2412.53,2026-04-30T22:57:35.225825
+5ad7eb9d-7753-44a9-85ac-21504d1671ed,98,Brian White,page_view,Tablet,1994.48,2026-04-30T22:57:33.224131
+6d2ed7c2-16a0-4b13-bd8c-4305397f4036,15,Elizabeth Vega,purchase,Laptop,299.37,2026-04-30T22:57:31.222448
+541f3d6d-ce19-4514-979f-c54269e9d18a,63,Travis Patel,page_view,Tablet,2185.85,2026-04-30T22:57:29.220446
+c296a547-f793-4cfd-8395-858713500b29,50,Debra Hall,add_to_cart,Smartwatch,1491.58,2026-04-30T22:57:27.218646
+b92af353-a2c7-4a54-8fe6-61e458add5cb,94,Michael Doyle,page_view,Tablet,1963.26,2026-04-30T22:57:25.217105
+cc09c93a-b7f4-4a95-969e-d68d0cb08e9e,34,Kelly Smith,page_view,Monitor,2865.15,2026-04-30T22:57:23.214932
+91f37de3-aa2b-473c-9df7-e81249b946c5,70,Katherine Zamora,add_to_cart,Headphones,1730.33,2026-04-30T22:57:21.212907
+a81bb579-d501-4313-83a7-5feb5e35ee6c,22,Alexis Olson,purchase,Smartwatch,1579.82,2026-04-30T22:57:19.210977
+e77a835e-cf0f-409b-8661-07d1d420124c,96,Brenda Gibbs,page_view,Tablet,908.81,2026-04-30T22:57:17.101073
+8c3371cf-89b1-4b1e-966a-6b1ec1d02b69,35,Patrick Wade,add_to_cart,Mouse,2507.94,2026-04-30T22:51:31.867024
