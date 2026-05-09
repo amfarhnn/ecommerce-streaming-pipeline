@@ -1,12 +1,10 @@
-import sqlite3
 from pathlib import Path
-import pandas as pd
+
+from src.db_postgres import query_dataframe
 
 
 EXPORT_DIR = Path("exports")
 EXPORT_DIR.mkdir(exist_ok=True)
-
-conn = sqlite3.connect("ecommerce_events.db")
 
 exports = {
     "event_count_by_type.csv": """
@@ -41,9 +39,7 @@ exports = {
 }
 
 for filename, query in exports.items():
-    df = pd.read_sql_query(query, conn)
+    df = query_dataframe(query)
     output_path = EXPORT_DIR / filename
     df.to_csv(output_path, index=False)
     print(f"Exported: {output_path}")
-
-conn.close()

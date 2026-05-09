@@ -1,8 +1,4 @@
-import sqlite3
-import pandas as pd
-
-
-conn = sqlite3.connect("ecommerce_events.db")
+from src.db_postgres import query_dataframe
 
 queries = {
     "Event count by type": """
@@ -38,7 +34,5 @@ queries = {
 
 for title, query in queries.items():
     print(f"\n=== {title} ===")
-    df = pd.read_sql_query(query, conn)
+    df = query_dataframe(query)
     print(df)
-
-conn.close()

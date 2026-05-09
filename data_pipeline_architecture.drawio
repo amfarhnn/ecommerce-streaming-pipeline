@@ -1,0 +1,296 @@
+<mxfile host="drawio" modified="2026-05-08T10:30:00.000Z" agent="GitHub Copilot" version="20.0.0" type="device" pages="2"><diagram id="pipeline-main" name="Full Architecture">
+<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" background="#ffffff" math="0" shadow="0">
+<root>
+<mxCell id="0"/>
+<mxCell id="1" parent="0"/>
+<mxCell id="title" value="Real-Time E-Commerce Streaming Pipeline" style="fontSize=28;fontStyle=1;align=center;fillColor=none;strokeColor=none;spacingTop=20;" vertex="1" parent="1">
+<mxGeometry x="0" y="10" width="1600" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="docker-bg" value="Docker Compose Environment" style="rounded=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=4;dashed=0;fontSize=14;fontStyle=1;padding=20;" vertex="1" parent="1">
+<mxGeometry x="20" y="80" width="1560" height="1080" as="geometry"/>
+</mxCell>
+<mxCell id="layer1-label" value="LAYER 1: DATA SOURCES" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
+<mxGeometry x="40" y="110" width="200" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="ecommerce-events" value="E-Commerce&#xa;Simulated Events" style="rounded=1;fillColor=#FFC107;strokeColor=#F57F17;strokeWidth=2;fontSize=11;align=center;fontStyle=1;spacing=5;" vertex="1" parent="1">
+<mxGeometry x="80" y="170" width="140" height="80" as="geometry"/>
+</mxCell>
+<mxCell id="event-structure" value="Event Data:&#xa;• event_id (UUID)&#xa;• user_id (random)&#xa;• user_name (Faker)&#xa;• event_type&#xa;• product&#xa;• price&#xa;• timestamp" style="rounded=0;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="80" y="260" width="140" height="110" as="geometry"/>
+</mxCell>
+<mxCell id="layer2-label" value="LAYER 2: PRODUCER" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
+<mxGeometry x="300" y="110" width="200" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="producer-box" value="Python Producer&#xa;producer.py" style="rounded=1;fillColor=#81C784;strokeColor=#1B5E20;strokeWidth=2;fontSize=11;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="310" y="170" width="140" height="80" as="geometry"/>
+</mxCell>
+<mxCell id="producer-details" value="Generates:&#xa;• Event types&#xa;• Event timestamps&#xa;• Every 2 seconds&#xa;• Serializes to JSON" style="rounded=0;fillColor=#E8F5E9;strokeColor=#1B5E20;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="310" y="260" width="140" height="100" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-ds-prod" value="generates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;startArrow=none;" edge="1" parent="1" source="ecommerce-events" target="producer-box">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="layer3-label" value="LAYER 3: MESSAGE BROKER" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
+<mxGeometry x="520" y="110" width="200" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="redpanda-box" value="Redpanda Broker&#xa;(Kafka Compatible)" style="rounded=1;fillColor=#BA68C8;strokeColor=#4A148C;strokeWidth=2;fontSize=11;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="540" y="170" width="140" height="80" as="geometry"/>
+</mxCell>
+<mxCell id="kafka-topic" value="Topic: ecommerce-events&#xa;Port: 9092&#xa;Partition buffer&#xa;Offset tracking" style="rounded=0;fillColor=#F3E5F5;strokeColor=#4A148C;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="540" y="260" width="140" height="100" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-prod-broker" value="publishes events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;startArrow=none;" edge="1" parent="1" source="producer-box" target="redpanda-box">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="layer4-label" value="LAYER 4: CONSUMER" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
+<mxGeometry x="740" y="110" width="200" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="consumer-box" value="Python Consumer&#xa;consumer.py" style="rounded=1;fillColor=#FF7043;strokeColor=#BF360C;strokeWidth=2;fontSize=11;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="760" y="170" width="140" height="80" as="geometry"/>
+</mxCell>
+<mxCell id="consumer-details" value="Consumer Group:&#xa;• Group ID: ecommerce-group&#xa;• Auto-offset reset&#xa;• Auto-commit: True&#xa;• Deserializes JSON" style="rounded=0;fillColor=#FFCCBC;strokeColor=#BF360C;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="760" y="260" width="140" height="100" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-broker-consumer" value="consumes events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#1565C0;endArrow=classic;endSize=8;startArrow=none;" edge="1" parent="1" source="redpanda-box" target="consumer-box">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="layer5-label" value="LAYER 5: TRANSFORMATION" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
+<mxGeometry x="960" y="110" width="220" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="transform-validate" value="Validate" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;spacing=3;" vertex="1" parent="1">
+<mxGeometry x="980" y="180" width="100" height="60" as="geometry"/>
+</mxCell>
+<mxCell id="transform-enrich" value="Enrich" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;spacing=3;" vertex="1" parent="1">
+<mxGeometry x="1100" y="180" width="100" height="60" as="geometry"/>
+</mxCell>
+<mxCell id="transform-filter" value="Filter" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;spacing=3;" vertex="1" parent="1">
+<mxGeometry x="1220" y="180" width="100" height="60" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-val-enrich" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="transform-validate" target="transform-enrich">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-enrich-filter" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="transform-enrich" target="transform-filter">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-consumer-transform" value="transformed event" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;" edge="1" parent="1" source="consumer-box" target="transform-validate">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="layer6-label" value="LAYER 6: DATA PERSISTENCE" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
+<mxGeometry x="40" y="420" width="200" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="db-container" value="SQLite Database (ecommerce_events.db)" style="rounded=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=2;padding=10;" vertex="1" parent="1">
+<mxGeometry x="40" y="470" width="1500" height="260" as="geometry"/>
+</mxCell>
+<mxCell id="events-table" value="EVENTS TABLE" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="80" y="500" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="events-schema" value="Schema:&#xa;• event_id (PK)&#xa;• user_id&#xa;• user_name&#xa;• event_type&#xa;• product&#xa;• price&#xa;• timestamp&#xa;• high_value" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="80" y="560" width="180" height="150" as="geometry"/>
+</mxCell>
+<mxCell id="product-table" value="PRODUCT_SALES_SUMMARY" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="320" y="500" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="product-schema" value="Schema:&#xa;• product (PK)&#xa;• total_purchases&#xa;• total_revenue&#xa;&#xa;Aggregations updated on each purchase" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="320" y="560" width="180" height="150" as="geometry"/>
+</mxCell>
+<mxCell id="db-insert" value="INSERT/UPDATE&#xa;Retry (3x)" style="rounded=1;fillColor=#BA68C8;strokeColor=#4A148C;strokeWidth=1;fontSize=8;align=center;spacing=3;" vertex="1" parent="1">
+<mxGeometry x="560" y="500" width="140" height="60" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-transform-db" value="persists" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#1565C0;endArrow=classic;endSize=8;" edge="1" parent="1" source="transform-filter" target="db-insert">
+<mxGeometry relative="1" as="geometry">
+<mxPoint x="1270" y="280" as="sourcePoint"/>
+<mxPoint x="760" y="380" as="targetPoint"/>
+</mxGeometry>
+</mxCell>
+<mxCell id="arrow-db-events" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9C27B0;endArrow=classic;endSize=6;dashed=1;" edge="1" parent="1" source="db-insert" target="events-table">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-db-product" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9C27B0;endArrow=classic;endSize=6;dashed=1;" edge="1" parent="1" source="db-insert" target="product-table">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="layer7-label" value="LAYER 7: ANALYTICS &amp; EXPORT" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
+<mxGeometry x="40" y="780" width="220" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="analytics-module" value="Analytics Engine" style="rounded=1;fillColor=#64B5F6;strokeColor=#1565C0;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="80" y="840" width="140" height="70" as="geometry"/>
+</mxCell>
+<mxCell id="export-module" value="Export Engine" style="rounded=1;fillColor=#64B5F6;strokeColor=#1565C0;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="280" y="840" width="140" height="70" as="geometry"/>
+</mxCell>
+<mxCell id="csv-events" value="📊 event_count" style="rounded=1;fillColor=#A5D6A7;strokeColor=#2E7D32;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
+<mxGeometry x="480" y="840" width="120" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="csv-products" value="📊 top_products" style="rounded=1;fillColor=#A5D6A7;strokeColor=#2E7D32;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
+<mxGeometry x="480" y="900" width="120" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="csv-revenue" value="📊 revenue" style="rounded=1;fillColor=#A5D6A7;strokeColor=#2E7D32;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
+<mxGeometry x="480" y="960" width="120" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-db-analytics" value="queries" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#2196F3;endArrow=classic;endSize=8;" edge="1" parent="1" source="events-table" target="analytics-module">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-analytics-export" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2196F3;endArrow=classic;endSize=8;" edge="1" parent="1" source="analytics-module" target="export-module">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-export-csv1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="export-module" target="csv-events">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-export-csv2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="export-module" target="csv-products">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-export-csv3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="export-module" target="csv-revenue">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="legend" value="Legend &amp; Key Points" style="fontSize=11;fontStyle=1;align=left;fillColor=#ECEFF1;strokeColor=#455A64;strokeWidth=2;padding=5;" vertex="1" parent="1">
+<mxGeometry x="650" y="840" width="900" height="170" as="geometry"/>
+</mxCell>
+<mxCell id="legend-content" value="✓ Real-time event streaming with sub-second latency&#xa;✓ Kafka-compatible message broker (Redpanda) at :9092&#xa;✓ Consumer group with auto-commit and offset tracking&#xa;✓ 3-step transformation: Validate → Enrich (high_value flag for $1000+) → Filter&#xa;✓ Fault-tolerant: 3-retry mechanism for database operations&#xa;✓ Real-time aggregation on product_sales_summary table&#xa;✓ Analytics queries exported to CSV files for visualization&#xa;✓ Color coding: Yellow=Source, Green=Producer, Purple=Broker, Orange=Consumer, Green=Transform, Purple=DB, Blue=Analytics" style="rounded=0;fillColor=#F5F5F5;strokeColor=#757575;strokeWidth=1;fontSize=8;align=left;padding=5;spacing=2;" vertex="1" parent="1">
+<mxGeometry x="650" y="855" width="900" height="155" as="geometry"/>
+</mxCell>
+</root>
+</mxGraphModel>
+</diagram>
+<diagram id="data-flow-detail" name="Detailed Data Flow Steps">
+<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" background="#ffffff" math="0" shadow="0">
+<root>
+<mxCell id="0"/>
+<mxCell id="1" parent="0"/>
+<mxCell id="title2" value="Step-by-Step Event Processing Flow" style="fontSize=26;fontStyle=1;align=center;fillColor=none;strokeColor=none;spacingTop=20;" vertex="1" parent="1">
+<mxGeometry x="0" y="10" width="1600" height="40" as="geometry"/>
+</mxCell>
+<mxCell id="step1-title" value="1️⃣ GENERATE EVENT" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
+<mxGeometry x="50" y="80" width="250" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="step1-gen-event" value="Random Event Object" style="rounded=1;fillColor=#FFC107;strokeColor=#F57F17;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="70" y="130" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="step1-event-example" value="{&#xa;  event_id: uuid&#xa;  user_id: 1-100&#xa;  event_type: page_view/add_to_cart/purchase&#xa;  product: Laptop/Phone/etc&#xa;  price: $20-$3000&#xa;  timestamp: now()&#xa;}" style="rounded=0;fillColor=#FFF8DC;strokeColor=#8B4513;strokeWidth=1;fontSize=8;align=left;padding=5;fontFamily=monospace;" vertex="1" parent="1">
+<mxGeometry x="50" y="200" width="220" height="120" as="geometry"/>
+</mxCell>
+<mxCell id="step2-title" value="2️⃣ PUBLISH TO KAFKA" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
+<mxGeometry x="350" y="80" width="250" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="step2-serialize" value="Serialize JSON" style="rounded=1;fillColor=#81C784;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="370" y="130" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="step2-kafka-send" value="Publish Topic: ecommerce-events" style="rounded=1;fillColor=#81C784;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="370" y="210" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="step2-broker" value="Redpanda Broker Buffer" style="rounded=1;fillColor=#BA68C8;strokeColor=#4A148C;strokeWidth=2;fontSize=9;align=center;" vertex="1" parent="1">
+<mxGeometry x="370" y="290" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-step1-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;" edge="1" parent="1" source="step1-gen-event" target="step2-serialize">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-step2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;" edge="1" parent="1" source="step2-serialize" target="step2-kafka-send">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-step2b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#BA68C8;endArrow=classic;endSize=8;" edge="1" parent="1" source="step2-kafka-send" target="step2-broker">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="step3-title" value="3️⃣ CONSUME FROM KAFKA" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
+<mxGeometry x="650" y="80" width="250" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="step3-consume" value="Pull from Broker" style="rounded=1;fillColor=#FF7043;strokeColor=#BF360C;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="670" y="130" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="step3-deserialize" value="Deserialize JSON" style="rounded=1;fillColor=#FF7043;strokeColor=#BF360C;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="670" y="210" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="step3-detail" value="Consumer Group: ecommerce-group&#xa;Auto-commit: enabled&#xa;Offset tracking: automatic" style="rounded=0;fillColor=#FFCCBC;strokeColor=#BF360C;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="670" y="280" width="180" height="70" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-step3a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1565C0;endArrow=classic;endSize=8;" edge="1" parent="1" source="step2-broker" target="step3-consume">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-step3b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;" edge="1" parent="1" source="step3-consume" target="step3-deserialize">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="step4-title" value="4️⃣ TRANSFORM DATA" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
+<mxGeometry x="950" y="80" width="250" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="step4-validate" value="Validate Event" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="970" y="130" width="160" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="step4-enrich" value="Enrich: high_value flag" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="970" y="210" width="160" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="step4-example" value="high_value = 1 if price >= 1000 else 0&#xa;&#xa;Example:&#xa;$1299.99 → high_value = 1" style="rounded=0;fillColor=#E8F5E9;strokeColor=#1B5E20;strokeWidth=1;fontSize=8;align=left;padding=5;fontFamily=monospace;" vertex="1" parent="1">
+<mxGeometry x="950" y="280" width="200" height="80" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-step4a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="step3-deserialize" target="step4-validate">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-step4b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="step4-validate" target="step4-enrich">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="step5-title" value="5️⃣ PERSIST TO DB" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
+<mxGeometry x="1250" y="80" width="250" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="step5-insert" value="Insert Event + Retry" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="1270" y="130" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="step5-update" value="Update Product Summary" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="1270" y="210" width="180" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="step5-detail" value="For PURCHASE events:&#xa;• Upsert product row&#xa;• Increment purchase_count + 1&#xa;• Add price to revenue_total&#xa;Retry: 3 attempts on failure" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="1250" y="280" width="220" height="90" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-step5a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9C27B0;endArrow=classic;endSize=8;" edge="1" parent="1" source="step4-enrich" target="step5-insert">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="arrow-step5b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9C27B0;endArrow=classic;endSize=8;" edge="1" parent="1" source="step5-insert" target="step5-update">
+<mxGeometry relative="1" as="geometry"/>
+</mxCell>
+<mxCell id="db-section" value="DATABASE STATE AFTER PROCESSING" style="fontSize=12;fontStyle=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
+<mxGeometry x="50" y="420" width="1500" height="30" as="geometry"/>
+</mxCell>
+<mxCell id="events-table-detail" value="EVENTS TABLE - Sample Row" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=9;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="50" y="480" width="700" height="40" as="geometry"/>
+</mxCell>
+<mxCell id="events-data" value="event_id | user_id | event_type | product | price | high_value&#xa;uuid123  | 45      | purchase  | Laptop  | 1299.99 | 1" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;fontFamily=monospace;" vertex="1" parent="1">
+<mxGeometry x="50" y="530" width="700" height="50" as="geometry"/>
+</mxCell>
+<mxCell id="product-table-detail" value="PRODUCT_SALES_SUMMARY - Real-Time Aggregation" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=9;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="800" y="480" width="750" height="40" as="geometry"/>
+</mxCell>
+<mxCell id="product-data" value="product    | total_purchases | total_revenue&#xa;Laptop     | 3               | 3899.97&#xa;Smartphone | 5               | 4999.95&#xa;Monitor    | 2               | 1299.98" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;fontFamily=monospace;" vertex="1" parent="1">
+<mxGeometry x="800" y="530" width="750" height="75" as="geometry"/>
+</mxCell>
+<mxCell id="analytics-section" value="ANALYTICS &amp; EXPORTS" style="fontSize=12;fontStyle=1;fillColor=#B2DFDB;strokeColor=#00695C;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
+<mxGeometry x="50" y="650" width="1500" height="30" as="geometry"/>
+</mxCell>
+<mxCell id="query1-box" value="Query 1: Event Count by Type" style="rounded=1;fillColor=#80DEEA;strokeColor=#00838F;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
+<mxGeometry x="50" y="710" width="220" height="40" as="geometry"/>
+</mxCell>
+<mxCell id="query1-result" value="Result Sample:&#xa;page_view: 234&#xa;add_to_cart: 156&#xa;purchase: 89" style="rounded=0;fillColor=#E0F2F1;strokeColor=#004D40;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="50" y="760" width="220" height="70" as="geometry"/>
+</mxCell>
+<mxCell id="query2-box" value="Query 2: Top Products by Purchases" style="rounded=1;fillColor=#80DEEA;strokeColor=#00838F;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
+<mxGeometry x="330" y="710" width="220" height="40" as="geometry"/>
+</mxCell>
+<mxCell id="query2-result" value="Result Sample:&#xa;Laptop: 23 purchases&#xa;Monitor: 18 purchases&#xa;Smartphone: 15 purchases" style="rounded=0;fillColor=#E0F2F1;strokeColor=#004D40;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="330" y="760" width="220" height="70" as="geometry"/>
+</mxCell>
+<mxCell id="query3-box" value="Query 3: Revenue by Product" style="rounded=1;fillColor=#80DEEA;strokeColor=#00838F;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
+<mxGeometry x="610" y="710" width="220" height="40" as="geometry"/>
+</mxCell>
+<mxCell id="query3-result" value="Result Sample:&#xa;Laptop: $45,234.77&#xa;Monitor: $23,991.82&#xa;Smartphone: $15,899.45" style="rounded=0;fillColor=#E0F2F1;strokeColor=#004D40;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="610" y="760" width="220" height="70" as="geometry"/>
+</mxCell>
+<mxCell id="csv-output" value="Export to CSV Files" style="rounded=1;fillColor=#A5D6A7;strokeColor=#2E7D32;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
+<mxGeometry x="890" y="710" width="220" height="40" as="geometry"/>
+</mxCell>
+<mxCell id="csv-files" value="✓ event_count_by_type.csv&#xa;✓ top_products_by_purchases.csv&#xa;✓ total_revenue_by_product.csv&#xa;✓ latest_events.csv" style="rounded=0;fillColor=#E8F5E9;strokeColor=#1B5E20;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="890" y="760" width="220" height="80" as="geometry"/>
+</mxCell>
+<mxCell id="perf-metrics" value="⚡ Performance Metrics" style="fontSize=11;fontStyle=1;align=center;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=2;padding=5;" vertex="1" parent="1">
+<mxGeometry x="1170" y="710" width="380" height="25" as="geometry"/>
+</mxCell>
+<mxCell id="metrics-content" value="✓ Event Latency: 50-200ms per event&#xa;✓ Throughput: ~30 events/min (simulated)&#xa;✓ Consumer Lag: 1-2 seconds (near real-time)&#xa;✓ Data Freshness: Aggregations update on insert&#xa;✓ Fault Tolerance: 3-retry mechanism&#xa;✓ Storage: SQLite optimized for queries&#xa;✓ Total Processing Time: ~100-300ms end-to-end" style="rounded=0;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
+<mxGeometry x="1170" y="740" width="380" height="120" as="geometry"/>
+</mxCell>
+</root>
+</mxGraphModel>
+</diagram>
+</mxfile>

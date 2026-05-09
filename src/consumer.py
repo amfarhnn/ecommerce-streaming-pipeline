@@ -6,7 +6,7 @@ from pathlib import Path
 from kafka import KafkaConsumer
 from dotenv import load_dotenv
 
-from db import (
+from db_postgres import (
     create_events_table,
     insert_event,
     update_product_sales_summary
@@ -43,8 +43,9 @@ def process_event(event):
 
     for attempt in range(retries):
         try:
-            insert_event(event)
-            update_product_sales_summary(event)
+            inserted = insert_event(event)
+            if inserted:
+                update_product_sales_summary(event)
             return True
         except Exception as e:
             logging.error(f"Retry {attempt + 1}/{retries} failed: {e}")
