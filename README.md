@@ -1,5 +1,7 @@
 # Real-Time E-Commerce Streaming Pipeline
 
+![Real-Time E-Commerce Streaming Pipeline Architecture](./Header.jpg)
+
 An end-to-end data engineering project that simulates e-commerce user activity, streams events through Redpanda, processes them with a Python consumer, stores them in PostgreSQL, and exports analytics-ready datasets for dashboarding.
 
 This project is designed to demonstrate a production-style streaming architecture in a compact local environment.

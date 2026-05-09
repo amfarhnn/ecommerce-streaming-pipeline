@@ -1,296 +1,236 @@
-<mxfile host="drawio" modified="2026-05-08T10:30:00.000Z" agent="GitHub Copilot" version="20.0.0" type="device" pages="2"><diagram id="pipeline-main" name="Full Architecture">
-<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" background="#ffffff" math="0" shadow="0">
-<root>
-<mxCell id="0"/>
-<mxCell id="1" parent="0"/>
-<mxCell id="title" value="Real-Time E-Commerce Streaming Pipeline" style="fontSize=28;fontStyle=1;align=center;fillColor=none;strokeColor=none;spacingTop=20;" vertex="1" parent="1">
-<mxGeometry x="0" y="10" width="1600" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="docker-bg" value="Docker Compose Environment" style="rounded=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=4;dashed=0;fontSize=14;fontStyle=1;padding=20;" vertex="1" parent="1">
-<mxGeometry x="20" y="80" width="1560" height="1080" as="geometry"/>
-</mxCell>
-<mxCell id="layer1-label" value="LAYER 1: DATA SOURCES" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
-<mxGeometry x="40" y="110" width="200" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="ecommerce-events" value="E-Commerce&#xa;Simulated Events" style="rounded=1;fillColor=#FFC107;strokeColor=#F57F17;strokeWidth=2;fontSize=11;align=center;fontStyle=1;spacing=5;" vertex="1" parent="1">
-<mxGeometry x="80" y="170" width="140" height="80" as="geometry"/>
-</mxCell>
-<mxCell id="event-structure" value="Event Data:&#xa;• event_id (UUID)&#xa;• user_id (random)&#xa;• user_name (Faker)&#xa;• event_type&#xa;• product&#xa;• price&#xa;• timestamp" style="rounded=0;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="80" y="260" width="140" height="110" as="geometry"/>
-</mxCell>
-<mxCell id="layer2-label" value="LAYER 2: PRODUCER" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
-<mxGeometry x="300" y="110" width="200" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="producer-box" value="Python Producer&#xa;producer.py" style="rounded=1;fillColor=#81C784;strokeColor=#1B5E20;strokeWidth=2;fontSize=11;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="310" y="170" width="140" height="80" as="geometry"/>
-</mxCell>
-<mxCell id="producer-details" value="Generates:&#xa;• Event types&#xa;• Event timestamps&#xa;• Every 2 seconds&#xa;• Serializes to JSON" style="rounded=0;fillColor=#E8F5E9;strokeColor=#1B5E20;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="310" y="260" width="140" height="100" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-ds-prod" value="generates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;startArrow=none;" edge="1" parent="1" source="ecommerce-events" target="producer-box">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="layer3-label" value="LAYER 3: MESSAGE BROKER" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
-<mxGeometry x="520" y="110" width="200" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="redpanda-box" value="Redpanda Broker&#xa;(Kafka Compatible)" style="rounded=1;fillColor=#BA68C8;strokeColor=#4A148C;strokeWidth=2;fontSize=11;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="540" y="170" width="140" height="80" as="geometry"/>
-</mxCell>
-<mxCell id="kafka-topic" value="Topic: ecommerce-events&#xa;Port: 9092&#xa;Partition buffer&#xa;Offset tracking" style="rounded=0;fillColor=#F3E5F5;strokeColor=#4A148C;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="540" y="260" width="140" height="100" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-prod-broker" value="publishes events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;startArrow=none;" edge="1" parent="1" source="producer-box" target="redpanda-box">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="layer4-label" value="LAYER 4: CONSUMER" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
-<mxGeometry x="740" y="110" width="200" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="consumer-box" value="Python Consumer&#xa;consumer.py" style="rounded=1;fillColor=#FF7043;strokeColor=#BF360C;strokeWidth=2;fontSize=11;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="760" y="170" width="140" height="80" as="geometry"/>
-</mxCell>
-<mxCell id="consumer-details" value="Consumer Group:&#xa;• Group ID: ecommerce-group&#xa;• Auto-offset reset&#xa;• Auto-commit: True&#xa;• Deserializes JSON" style="rounded=0;fillColor=#FFCCBC;strokeColor=#BF360C;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="760" y="260" width="140" height="100" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-broker-consumer" value="consumes events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#1565C0;endArrow=classic;endSize=8;startArrow=none;" edge="1" parent="1" source="redpanda-box" target="consumer-box">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="layer5-label" value="LAYER 5: TRANSFORMATION" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
-<mxGeometry x="960" y="110" width="220" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="transform-validate" value="Validate" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;spacing=3;" vertex="1" parent="1">
-<mxGeometry x="980" y="180" width="100" height="60" as="geometry"/>
-</mxCell>
-<mxCell id="transform-enrich" value="Enrich" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;spacing=3;" vertex="1" parent="1">
-<mxGeometry x="1100" y="180" width="100" height="60" as="geometry"/>
-</mxCell>
-<mxCell id="transform-filter" value="Filter" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;spacing=3;" vertex="1" parent="1">
-<mxGeometry x="1220" y="180" width="100" height="60" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-val-enrich" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="transform-validate" target="transform-enrich">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-enrich-filter" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="transform-enrich" target="transform-filter">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-consumer-transform" value="transformed event" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;" edge="1" parent="1" source="consumer-box" target="transform-validate">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="layer6-label" value="LAYER 6: DATA PERSISTENCE" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
-<mxGeometry x="40" y="420" width="200" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="db-container" value="SQLite Database (ecommerce_events.db)" style="rounded=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=2;padding=10;" vertex="1" parent="1">
-<mxGeometry x="40" y="470" width="1500" height="260" as="geometry"/>
-</mxCell>
-<mxCell id="events-table" value="EVENTS TABLE" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="80" y="500" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="events-schema" value="Schema:&#xa;• event_id (PK)&#xa;• user_id&#xa;• user_name&#xa;• event_type&#xa;• product&#xa;• price&#xa;• timestamp&#xa;• high_value" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="80" y="560" width="180" height="150" as="geometry"/>
-</mxCell>
-<mxCell id="product-table" value="PRODUCT_SALES_SUMMARY" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="320" y="500" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="product-schema" value="Schema:&#xa;• product (PK)&#xa;• total_purchases&#xa;• total_revenue&#xa;&#xa;Aggregations updated on each purchase" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="320" y="560" width="180" height="150" as="geometry"/>
-</mxCell>
-<mxCell id="db-insert" value="INSERT/UPDATE&#xa;Retry (3x)" style="rounded=1;fillColor=#BA68C8;strokeColor=#4A148C;strokeWidth=1;fontSize=8;align=center;spacing=3;" vertex="1" parent="1">
-<mxGeometry x="560" y="500" width="140" height="60" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-transform-db" value="persists" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#1565C0;endArrow=classic;endSize=8;" edge="1" parent="1" source="transform-filter" target="db-insert">
-<mxGeometry relative="1" as="geometry">
-<mxPoint x="1270" y="280" as="sourcePoint"/>
-<mxPoint x="760" y="380" as="targetPoint"/>
-</mxGeometry>
-</mxCell>
-<mxCell id="arrow-db-events" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9C27B0;endArrow=classic;endSize=6;dashed=1;" edge="1" parent="1" source="db-insert" target="events-table">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-db-product" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9C27B0;endArrow=classic;endSize=6;dashed=1;" edge="1" parent="1" source="db-insert" target="product-table">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="layer7-label" value="LAYER 7: ANALYTICS &amp; EXPORT" style="fontSize=12;fontStyle=1;align=center;fillColor=#FFD54F;strokeColor=#F57F17;strokeWidth=2;padding=5;" vertex="1" parent="1">
-<mxGeometry x="40" y="780" width="220" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="analytics-module" value="Analytics Engine" style="rounded=1;fillColor=#64B5F6;strokeColor=#1565C0;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="80" y="840" width="140" height="70" as="geometry"/>
-</mxCell>
-<mxCell id="export-module" value="Export Engine" style="rounded=1;fillColor=#64B5F6;strokeColor=#1565C0;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="280" y="840" width="140" height="70" as="geometry"/>
-</mxCell>
-<mxCell id="csv-events" value="📊 event_count" style="rounded=1;fillColor=#A5D6A7;strokeColor=#2E7D32;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
-<mxGeometry x="480" y="840" width="120" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="csv-products" value="📊 top_products" style="rounded=1;fillColor=#A5D6A7;strokeColor=#2E7D32;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
-<mxGeometry x="480" y="900" width="120" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="csv-revenue" value="📊 revenue" style="rounded=1;fillColor=#A5D6A7;strokeColor=#2E7D32;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
-<mxGeometry x="480" y="960" width="120" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-db-analytics" value="queries" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=9;fontStyle=1;strokeWidth=2;strokeColor=#2196F3;endArrow=classic;endSize=8;" edge="1" parent="1" source="events-table" target="analytics-module">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-analytics-export" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2196F3;endArrow=classic;endSize=8;" edge="1" parent="1" source="analytics-module" target="export-module">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-export-csv1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="export-module" target="csv-events">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-export-csv2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="export-module" target="csv-products">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-export-csv3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="export-module" target="csv-revenue">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="legend" value="Legend &amp; Key Points" style="fontSize=11;fontStyle=1;align=left;fillColor=#ECEFF1;strokeColor=#455A64;strokeWidth=2;padding=5;" vertex="1" parent="1">
-<mxGeometry x="650" y="840" width="900" height="170" as="geometry"/>
-</mxCell>
-<mxCell id="legend-content" value="✓ Real-time event streaming with sub-second latency&#xa;✓ Kafka-compatible message broker (Redpanda) at :9092&#xa;✓ Consumer group with auto-commit and offset tracking&#xa;✓ 3-step transformation: Validate → Enrich (high_value flag for $1000+) → Filter&#xa;✓ Fault-tolerant: 3-retry mechanism for database operations&#xa;✓ Real-time aggregation on product_sales_summary table&#xa;✓ Analytics queries exported to CSV files for visualization&#xa;✓ Color coding: Yellow=Source, Green=Producer, Purple=Broker, Orange=Consumer, Green=Transform, Purple=DB, Blue=Analytics" style="rounded=0;fillColor=#F5F5F5;strokeColor=#757575;strokeWidth=1;fontSize=8;align=left;padding=5;spacing=2;" vertex="1" parent="1">
-<mxGeometry x="650" y="855" width="900" height="155" as="geometry"/>
-</mxCell>
-</root>
-</mxGraphModel>
-</diagram>
-<diagram id="data-flow-detail" name="Detailed Data Flow Steps">
-<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" background="#ffffff" math="0" shadow="0">
-<root>
-<mxCell id="0"/>
-<mxCell id="1" parent="0"/>
-<mxCell id="title2" value="Step-by-Step Event Processing Flow" style="fontSize=26;fontStyle=1;align=center;fillColor=none;strokeColor=none;spacingTop=20;" vertex="1" parent="1">
-<mxGeometry x="0" y="10" width="1600" height="40" as="geometry"/>
-</mxCell>
-<mxCell id="step1-title" value="1️⃣ GENERATE EVENT" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
-<mxGeometry x="50" y="80" width="250" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="step1-gen-event" value="Random Event Object" style="rounded=1;fillColor=#FFC107;strokeColor=#F57F17;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="70" y="130" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="step1-event-example" value="{&#xa;  event_id: uuid&#xa;  user_id: 1-100&#xa;  event_type: page_view/add_to_cart/purchase&#xa;  product: Laptop/Phone/etc&#xa;  price: $20-$3000&#xa;  timestamp: now()&#xa;}" style="rounded=0;fillColor=#FFF8DC;strokeColor=#8B4513;strokeWidth=1;fontSize=8;align=left;padding=5;fontFamily=monospace;" vertex="1" parent="1">
-<mxGeometry x="50" y="200" width="220" height="120" as="geometry"/>
-</mxCell>
-<mxCell id="step2-title" value="2️⃣ PUBLISH TO KAFKA" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
-<mxGeometry x="350" y="80" width="250" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="step2-serialize" value="Serialize JSON" style="rounded=1;fillColor=#81C784;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="370" y="130" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="step2-kafka-send" value="Publish Topic: ecommerce-events" style="rounded=1;fillColor=#81C784;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="370" y="210" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="step2-broker" value="Redpanda Broker Buffer" style="rounded=1;fillColor=#BA68C8;strokeColor=#4A148C;strokeWidth=2;fontSize=9;align=center;" vertex="1" parent="1">
-<mxGeometry x="370" y="290" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-step1-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;" edge="1" parent="1" source="step1-gen-event" target="step2-serialize">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-step2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;" edge="1" parent="1" source="step2-serialize" target="step2-kafka-send">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-step2b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#BA68C8;endArrow=classic;endSize=8;" edge="1" parent="1" source="step2-kafka-send" target="step2-broker">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="step3-title" value="3️⃣ CONSUME FROM KAFKA" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
-<mxGeometry x="650" y="80" width="250" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="step3-consume" value="Pull from Broker" style="rounded=1;fillColor=#FF7043;strokeColor=#BF360C;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="670" y="130" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="step3-deserialize" value="Deserialize JSON" style="rounded=1;fillColor=#FF7043;strokeColor=#BF360C;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="670" y="210" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="step3-detail" value="Consumer Group: ecommerce-group&#xa;Auto-commit: enabled&#xa;Offset tracking: automatic" style="rounded=0;fillColor=#FFCCBC;strokeColor=#BF360C;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="670" y="280" width="180" height="70" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-step3a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1565C0;endArrow=classic;endSize=8;" edge="1" parent="1" source="step2-broker" target="step3-consume">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-step3b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#E53935;endArrow=classic;endSize=8;" edge="1" parent="1" source="step3-consume" target="step3-deserialize">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="step4-title" value="4️⃣ TRANSFORM DATA" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
-<mxGeometry x="950" y="80" width="250" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="step4-validate" value="Validate Event" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="970" y="130" width="160" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="step4-enrich" value="Enrich: high_value flag" style="rounded=1;fillColor=#66BB6A;strokeColor=#1B5E20;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="970" y="210" width="160" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="step4-example" value="high_value = 1 if price >= 1000 else 0&#xa;&#xa;Example:&#xa;$1299.99 → high_value = 1" style="rounded=0;fillColor=#E8F5E9;strokeColor=#1B5E20;strokeWidth=1;fontSize=8;align=left;padding=5;fontFamily=monospace;" vertex="1" parent="1">
-<mxGeometry x="950" y="280" width="200" height="80" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-step4a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="step3-deserialize" target="step4-validate">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-step4b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4CAF50;endArrow=classic;endSize=8;" edge="1" parent="1" source="step4-validate" target="step4-enrich">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="step5-title" value="5️⃣ PERSIST TO DB" style="fontSize=13;fontStyle=1;fillColor=#FFEB3B;strokeColor=#F57F17;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
-<mxGeometry x="1250" y="80" width="250" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="step5-insert" value="Insert Event + Retry" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="1270" y="130" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="step5-update" value="Update Product Summary" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="1270" y="210" width="180" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="step5-detail" value="For PURCHASE events:&#xa;• Upsert product row&#xa;• Increment purchase_count + 1&#xa;• Add price to revenue_total&#xa;Retry: 3 attempts on failure" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="1250" y="280" width="220" height="90" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-step5a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9C27B0;endArrow=classic;endSize=8;" edge="1" parent="1" source="step4-enrich" target="step5-insert">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="arrow-step5b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9C27B0;endArrow=classic;endSize=8;" edge="1" parent="1" source="step5-insert" target="step5-update">
-<mxGeometry relative="1" as="geometry"/>
-</mxCell>
-<mxCell id="db-section" value="DATABASE STATE AFTER PROCESSING" style="fontSize=12;fontStyle=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
-<mxGeometry x="50" y="420" width="1500" height="30" as="geometry"/>
-</mxCell>
-<mxCell id="events-table-detail" value="EVENTS TABLE - Sample Row" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=9;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="50" y="480" width="700" height="40" as="geometry"/>
-</mxCell>
-<mxCell id="events-data" value="event_id | user_id | event_type | product | price | high_value&#xa;uuid123  | 45      | purchase  | Laptop  | 1299.99 | 1" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;fontFamily=monospace;" vertex="1" parent="1">
-<mxGeometry x="50" y="530" width="700" height="50" as="geometry"/>
-</mxCell>
-<mxCell id="product-table-detail" value="PRODUCT_SALES_SUMMARY - Real-Time Aggregation" style="rounded=1;fillColor=#CE93D8;strokeColor=#6A1B9A;strokeWidth=2;fontSize=9;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="800" y="480" width="750" height="40" as="geometry"/>
-</mxCell>
-<mxCell id="product-data" value="product    | total_purchases | total_revenue&#xa;Laptop     | 3               | 3899.97&#xa;Smartphone | 5               | 4999.95&#xa;Monitor    | 2               | 1299.98" style="rounded=0;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=1;fontSize=8;align=left;padding=5;fontFamily=monospace;" vertex="1" parent="1">
-<mxGeometry x="800" y="530" width="750" height="75" as="geometry"/>
-</mxCell>
-<mxCell id="analytics-section" value="ANALYTICS &amp; EXPORTS" style="fontSize=12;fontStyle=1;fillColor=#B2DFDB;strokeColor=#00695C;strokeWidth=2;padding=5;align=center;" vertex="1" parent="1">
-<mxGeometry x="50" y="650" width="1500" height="30" as="geometry"/>
-</mxCell>
-<mxCell id="query1-box" value="Query 1: Event Count by Type" style="rounded=1;fillColor=#80DEEA;strokeColor=#00838F;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
-<mxGeometry x="50" y="710" width="220" height="40" as="geometry"/>
-</mxCell>
-<mxCell id="query1-result" value="Result Sample:&#xa;page_view: 234&#xa;add_to_cart: 156&#xa;purchase: 89" style="rounded=0;fillColor=#E0F2F1;strokeColor=#004D40;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="50" y="760" width="220" height="70" as="geometry"/>
-</mxCell>
-<mxCell id="query2-box" value="Query 2: Top Products by Purchases" style="rounded=1;fillColor=#80DEEA;strokeColor=#00838F;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
-<mxGeometry x="330" y="710" width="220" height="40" as="geometry"/>
-</mxCell>
-<mxCell id="query2-result" value="Result Sample:&#xa;Laptop: 23 purchases&#xa;Monitor: 18 purchases&#xa;Smartphone: 15 purchases" style="rounded=0;fillColor=#E0F2F1;strokeColor=#004D40;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="330" y="760" width="220" height="70" as="geometry"/>
-</mxCell>
-<mxCell id="query3-box" value="Query 3: Revenue by Product" style="rounded=1;fillColor=#80DEEA;strokeColor=#00838F;strokeWidth=1;fontSize=9;align=center;" vertex="1" parent="1">
-<mxGeometry x="610" y="710" width="220" height="40" as="geometry"/>
-</mxCell>
-<mxCell id="query3-result" value="Result Sample:&#xa;Laptop: $45,234.77&#xa;Monitor: $23,991.82&#xa;Smartphone: $15,899.45" style="rounded=0;fillColor=#E0F2F1;strokeColor=#004D40;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="610" y="760" width="220" height="70" as="geometry"/>
-</mxCell>
-<mxCell id="csv-output" value="Export to CSV Files" style="rounded=1;fillColor=#A5D6A7;strokeColor=#2E7D32;strokeWidth=2;fontSize=10;align=center;fontStyle=1;" vertex="1" parent="1">
-<mxGeometry x="890" y="710" width="220" height="40" as="geometry"/>
-</mxCell>
-<mxCell id="csv-files" value="✓ event_count_by_type.csv&#xa;✓ top_products_by_purchases.csv&#xa;✓ total_revenue_by_product.csv&#xa;✓ latest_events.csv" style="rounded=0;fillColor=#E8F5E9;strokeColor=#1B5E20;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="890" y="760" width="220" height="80" as="geometry"/>
-</mxCell>
-<mxCell id="perf-metrics" value="⚡ Performance Metrics" style="fontSize=11;fontStyle=1;align=center;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=2;padding=5;" vertex="1" parent="1">
-<mxGeometry x="1170" y="710" width="380" height="25" as="geometry"/>
-</mxCell>
-<mxCell id="metrics-content" value="✓ Event Latency: 50-200ms per event&#xa;✓ Throughput: ~30 events/min (simulated)&#xa;✓ Consumer Lag: 1-2 seconds (near real-time)&#xa;✓ Data Freshness: Aggregations update on insert&#xa;✓ Fault Tolerance: 3-retry mechanism&#xa;✓ Storage: SQLite optimized for queries&#xa;✓ Total Processing Time: ~100-300ms end-to-end" style="rounded=0;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=1;fontSize=8;align=left;padding=5;" vertex="1" parent="1">
-<mxGeometry x="1170" y="740" width="380" height="120" as="geometry"/>
-</mxCell>
-</root>
-</mxGraphModel>
-</diagram>
+<mxfile host="Electron" agent="Codex" pages="3">
+  <diagram id="full-runtime-architecture" name="Full Runtime Architecture">
+    <mxGraphModel dx="857" dy="510" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1800" pageHeight="1200" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Real-Time E-Commerce Streaming Pipeline" vertex="1">
+          <mxGeometry height="50" width="1800" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;labelBackgroundColor=none;" value="Producer -&gt; Redpanda topic -&gt; Consumer -&gt; PostgreSQL -&gt; Analytics exports -&gt; BI dashboard" vertex="1">
+          <mxGeometry height="30" width="1800" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="host-zone" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fontSize=14;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="Developer Workstation / Host" vertex="1">
+          <mxGeometry height="930" width="310" x="40" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="docker-zone" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;fontStyle=1;fontSize=14;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="Docker Compose Network" vertex="1">
+          <mxGeometry height="930" width="1360" x="390" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="env-file" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;fontFamily=Courier New;labelBackgroundColor=none;" value=".env&#xa;POSTGRES_HOST=127.0.0.1&#xa;POSTGRES_PORT=5433&#xa;POSTGRES_DB=ecommerce_db&#xa;KAFKA_BROKER=redpanda:9092" vertex="1">
+          <mxGeometry height="150" width="250" x="70" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="docker-compose-file" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="docker-compose.yml&#xa;Defines services, healthchecks, ports, volumes, and startup dependencies" vertex="1">
+          <mxGeometry height="110" width="250" x="70" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="local-scripts" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="Local analytics scripts&#xa;analytics.py&#xa;check_db.py&#xa;export_analytics.py" vertex="1">
+          <mxGeometry height="130" width="250" x="70" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="exports-folder" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;fontFamily=Courier New;labelBackgroundColor=none;" value="exports/&#xa;event_count_by_type.csv&#xa;latest_events.csv&#xa;top_products_by_purchases.csv&#xa;total_revenue_by_product.csv" vertex="1">
+          <mxGeometry height="150" width="250" x="70" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="power-bi" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="Power BI / BI Tool&#xa;Event distribution&#xa;Revenue by product&#xa;Top purchases&#xa;Recent events" vertex="1">
+          <mxGeometry height="130" width="250" x="70" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="producer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="producer container&#xa;python src/producer.py&#xa;Faker data generator&#xa;Event every 2 seconds&#xa;JSON serializer" vertex="1">
+          <mxGeometry height="160" width="260" x="470" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="redpanda" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="redpanda container&#xa;redpandadata/redpanda:latest&#xa;Kafka API listener: 9092&#xa;Advertised as redpanda:9092&#xa;Healthcheck: rpk cluster health" vertex="1">
+          <mxGeometry height="160" width="290" x="800" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="topic" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="Kafka-compatible topic&#xa;ecommerce-events&#xa;Consumer group: ecommerce-consumer-group&#xa;auto_offset_reset=earliest&#xa;enable_auto_commit=True" vertex="1">
+          <mxGeometry height="140" width="250" x="820" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="consumer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="consumer container&#xa;python src/consumer.py&#xa;Reads topic messages&#xa;Deserializes JSON&#xa;Logs to logs/streaming_pipeline.log" vertex="1">
+          <mxGeometry height="160" width="270" x="1160" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="transform" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="Transform + reliability logic&#xa;high_value = 1 when price &gt;= 1000&#xa;3 database write retries&#xa;Insert event idempotently&#xa;Update summary only if insert is new" vertex="1">
+          <mxGeometry height="160" width="270" x="1160" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="postgres" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="ecommerce_postgres container&#xa;postgres:16&#xa;Database: ecommerce_db&#xa;Container port: 5432&#xa;Host port: 5433&#xa;Healthcheck: pg_isready" vertex="1">
+          <mxGeometry height="170" width="290" x="800" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="events-table" parent="1" style="shape=table;startSize=28;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;strokeWidth=2;fontSize=12;labelBackgroundColor=none;" value="events table&#xa;event_id PK&#xa;user_id, user_name&#xa;event_type, product&#xa;price, timestamp&#xa;high_value" vertex="1">
+          <mxGeometry height="170" width="250" x="1148" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="summary-table" parent="1" style="shape=table;startSize=28;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;strokeWidth=2;fontSize=12;labelBackgroundColor=none;" value="product_sales_summary&#xa;product PK&#xa;total_purchases&#xa;total_revenue&#xa;Updated only for purchase events" vertex="1">
+          <mxGeometry height="150" width="250" x="1450" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="volume" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=12;align=center;verticalAlign=middle;spacing=8;labelBackgroundColor=none;" value="postgres_data volume&#xa;Persistent database storage&#xa;/var/lib/postgresql/data" vertex="1">
+          <mxGeometry height="90" width="290" x="800" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="analytics-box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="Analytics layer&#xa;query_dataframe()&#xa;analytics.py prints reports&#xa;export_analytics.py writes CSV files" vertex="1">
+          <mxGeometry height="120" width="330" x="1160" y="927" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-compose-producer" edge="1" parent="1" source="docker-compose-file" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="producer" value="builds + starts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-producer-redpanda" edge="1" parent="1" source="producer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;fontSize=11;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="redpanda" value="send JSON event">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-redpanda-topic" edge="1" parent="1" source="redpanda" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="topic" value="stores message stream">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-topic-consumer" edge="1" parent="1" source="topic" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;fontSize=11;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="consumer" value="consume messages">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-consumer-transform" edge="1" parent="1" source="consumer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="transform" value="deserialize + enrich">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-transform-postgres" edge="1" parent="1" source="transform" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;fontSize=11;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="postgres" value="psycopg2 writes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-postgres-events" edge="1" parent="1" source="postgres" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=10;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="events-table" value="INSERT ON CONFLICT DO NOTHING">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-events-summary" edge="1" parent="1" source="events-table" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=10;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="summary-table" value="purchase upsert">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-postgres-volume" edge="1" parent="1" source="postgres" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=10;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="volume" value="persists data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-local-postgres" edge="1" parent="1" source="local-scripts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=10;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="postgres" value="host access 127.0.0.1:5433">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-postgres-analytics" edge="1" parent="1" source="postgres" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=10;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="analytics-box" value="SELECT analytics queries">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-analytics-exports" edge="1" parent="1" source="analytics-box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=10;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="exports-folder" value="write CSVs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-exports-bi" edge="1" parent="1" source="exports-folder" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=10;endArrow=classic;labelBackgroundColor=none;fontColor=default;" target="power-bi" value="dashboard input">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="event-processing-flow" name="Event Processing Flow">
+    <mxGraphModel dx="1500" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1000" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="flow-title" value="Runtime Event Processing Flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=26;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="0" y="30" width="1800" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="step1" value="1. Generate event&#xa;uuid event_id&#xa;random user + product&#xa;event_type in page_view, add_to_cart, purchase&#xa;price 20 to 3000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="140" width="250" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="step2" value="2. Publish event&#xa;KafkaProducer sends JSON bytes&#xa;Topic: ecommerce-events&#xa;Broker: redpanda:9092" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#7E22CE;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="140" width="250" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="step3" value="3. Consume event&#xa;KafkaConsumer subscribes to topic&#xa;Group: ecommerce-consumer-group&#xa;JSON deserializer restores dict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="690" y="140" width="250" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="step4" value="4. Transform event&#xa;Add high_value flag&#xa;1 when price &gt;= 1000&#xa;0 when price &lt; 1000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF9C3;strokeColor=#CA8A04;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="140" width="250" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="step5" value="5. Persist event&#xa;create_events_table() on startup&#xa;insert_event() writes to events&#xa;ON CONFLICT event_id DO NOTHING" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#1D4ED8;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="140" width="280" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="decision" value="Was event inserted and event_type == purchase?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="735" y="420" width="230" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="purchase-yes" value="Yes&#xa;update_product_sales_summary()&#xa;Insert product row or increment total_purchases&#xa;Add price to total_revenue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="410" width="300" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="purchase-no" value="No&#xa;Keep raw event only&#xa;No product summary update&#xa;Prevents duplicate replay inflation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#64748B;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="410" width="260" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="analytics-step" value="Analytics and export&#xa;analytics.py reads PostgreSQL&#xa;export_analytics.py creates CSV files&#xa;check_db.py validates latest rows and summary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#15803D;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="720" y="690" width="360" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-edge-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="step1" target="step2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-edge-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="step2" target="step3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-edge-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="step3" target="step4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-edge-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="step4" target="step5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-edge-5" value="rowcount == 1?" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="step5" target="decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-edge-yes" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4F46E5;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="decision" target="purchase-yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-edge-no" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="decision" target="purchase-no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-edge-analytics-1" value="query" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#15803D;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="purchase-yes" target="analytics-step">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-edge-analytics-2" value="query" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#15803D;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="purchase-no" target="analytics-step">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="deployment-operations" name="Deployment and Operations">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1000" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ops-title" value="Deployment and Operations View" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=26;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="0" y="30" width="1800" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-compose" value="docker compose up --build&#xa;Builds Python image from Dockerfile&#xa;Starts infrastructure and app services&#xa;Uses health-gated dependencies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#1D4ED8;strokeWidth=2;fontSize=13;fontStyle=1;align=left;verticalAlign=top;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="140" width="330" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-redpanda-health" value="Redpanda readiness&#xa;Command: rpk cluster health&#xa;-X brokers=localhost:9092&#xa;start_period=30s&#xa;producer waits for healthy Redpanda&#xa;consumer waits for healthy Redpanda" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#7E22CE;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="510" y="130" width="330" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-postgres-health" value="PostgreSQL readiness&#xa;Image: postgres:16&#xa;Command: pg_isready&#xa;Volume: postgres_data&#xa;Host port: 5433&#xa;Container port: 5432&#xa;consumer waits for healthy PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#1D4ED8;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="940" y="130" width="330" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-env" value="Runtime configuration&#xa;Host analytics: 127.0.0.1:5433&#xa;Docker consumer: postgres:5432&#xa;Docker Kafka broker: redpanda:9092&#xa;Host Kafka broker for local producer: 127.0.0.1:9092" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#334155;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="130" width="340" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-app-image" value="Python application image&#xa;Base: python:3.11-slim&#xa;Installs requirements.txt&#xa;Includes producer, consumer, DB adapter, analytics scripts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="420" width="330" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-producer-command" value="producer service&#xa;command: python src/producer.py&#xa;depends_on redpanda healthy&#xa;KAFKA_BROKER=redpanda:9092" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="510" y="410" width="330" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-consumer-command" value="consumer service&#xa;command: python src/consumer.py&#xa;depends_on redpanda + postgres healthy&#xa;POSTGRES_HOST=postgres&#xa;POSTGRES_PORT=5432" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="940" y="410" width="330" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-outputs" value="Operational outputs&#xa;logs/streaming_pipeline.log&#xa;PostgreSQL rows&#xa;exports/*.csv&#xa;Dashboard-ready analytics files" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFCCB;strokeColor=#4D7C0F;strokeWidth=2;fontSize=12;align=left;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="410" width="340" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-1" value="starts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1D4ED8;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-compose" target="ops-redpanda-health">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-2" value="starts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1D4ED8;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-compose" target="ops-postgres-health">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-3" value="builds" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-compose" target="ops-app-image">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-4" value="runs image" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#16A34A;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-app-image" target="ops-producer-command">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-5" value="runs image" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EA580C;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-app-image" target="ops-consumer-command">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-6" value="requires healthy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7E22CE;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-redpanda-health" target="ops-producer-command">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-7" value="requires healthy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7E22CE;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-redpanda-health" target="ops-consumer-command">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-8" value="requires healthy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1D4ED8;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-postgres-health" target="ops-consumer-command">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-9" value="feeds" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4D7C0F;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-consumer-command" target="ops-outputs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ops-edge-10" value="documents host/container addresses" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=2;fontSize=11;endArrow=classic;" edge="1" parent="1" source="ops-env" target="ops-postgres-health">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>
