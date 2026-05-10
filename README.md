@@ -18,6 +18,8 @@ This project is designed to demonstrate a production-style streaming architectur
 
 ## Architecture
 
+![Animated pipeline flowchart](./flowchart%20animation.gif)
+
 ```text
 Python Producer
     |
